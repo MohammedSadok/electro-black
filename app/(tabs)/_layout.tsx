@@ -79,7 +79,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused, color, size }) =>
             focused ? (
               <Image
-                className="w-8 h-8"
+                className="w-8 h-8 "
                 source={require("../../assets/images/icons/account.png")}
               />
             ) : (

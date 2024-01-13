@@ -1,27 +1,16 @@
-import { StyleSheet, Text } from "react-native";
+import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-export default function TabOneScreen() {
+import { products } from "../../assets/data/products";
+import ProductItem from "../../components/ProductItem";
+const Page = () => {
   return (
-    <SafeAreaView className="bg-black">
-      <Text className="text-xl text-red-500">Tab One</Text>
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <ScrollView className="mt-5 space-y-2">
+        {products.map((product) => (
+          <ProductItem key={product.id} {...product} />
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
+};
+export default Page;
