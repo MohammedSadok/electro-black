@@ -1,41 +1,92 @@
 import { Tabs } from "expo-router";
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import TabBar from "../../components/TabBar";
+import { Image } from "react-native";
+import Colors from "../../constants/Colors";
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "black",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: Colors.dark,
+        tabBarInactiveTintColor: Colors.gray,
+        tabBarLabelStyle: {
+          fontFamily: "mul-bold",
+        },
+        tabBarStyle: {
+          height: 55,
+          paddingBottom: 5,
+        },
       }}
-      // tabBar={(props) => <TabBar {...props} />}
     >
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ color, focused, size }) => (
-            <AntDesign name="appstore1" size={24} color={color} />
-          ),
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color, focused, size }) =>
+            focused ? (
+              <Image
+                className="w-8 h-8"
+                source={require("../../assets/images/icons/home.png")}
+              />
+            ) : (
+              <Image
+                className="w-7 h-7"
+                source={require("../../assets/images/icons/home-outline.png")}
+              />
+            ),
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
-          tabBarIcon: ({ color, focused, size }) => (
-            <FontAwesome name="search" size={24} color={color} />
-          ),
+          tabBarLabel: "Search",
+          tabBarIcon: ({ color, focused, size }) =>
+            focused ? (
+              <Image
+                className="w-8 h-8"
+                source={require("../../assets/images/icons/search.png")}
+              />
+            ) : (
+              <Image
+                className="w-7 h-7"
+                source={require("../../assets/images/icons/search-outline.png")}
+              />
+            ),
+        }}
+      />
+      <Tabs.Screen
+        name="cart"
+        options={{
+          tabBarLabel: "Cart",
+          tabBarIcon: ({ focused, color, size }) =>
+            focused ? (
+              <Image
+                className="h-8 w-7"
+                source={require("../../assets/images/icons/cart.png")}
+              />
+            ) : (
+              <Image
+                className="w-7 h-7"
+                source={require("../../assets/images/icons/cart-outline.png")}
+              />
+            ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ focused, color }) =>
+          tabBarLabel: "Profile",
+          tabBarIcon: ({ focused, color, size }) =>
             focused ? (
-              <FontAwesome name="user" size={24} color={color} />
+              <Image
+                className="w-8 h-8"
+                source={require("../../assets/images/icons/account.png")}
+              />
             ) : (
-              <FontAwesome name="user" size={24} color={color} />
+              <Image
+                className="w-7 h-7"
+                source={require("../../assets/images/icons/account-outline.png")}
+              />
             ),
         }}
       />
