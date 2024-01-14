@@ -22,7 +22,7 @@ const Page = (props: Props) => {
       {products.length > 0 ? (
         <FlatList
           data={products}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id}
           className="mt-5 space-y-2 "
           renderItem={({ item }) => <CartItem key={item.id} data={item} />}
         ></FlatList>
