@@ -1,3 +1,4 @@
+import CartItem from "@components/CartItem";
 import React from "react";
 import {
   FlatList,
@@ -7,7 +8,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CartItem from "../../components/CartItem";
 import useCartStore from "../../store/cartStore";
 type Props = {};
 
@@ -24,11 +24,16 @@ const Page = (props: Props) => {
           data={products}
           keyExtractor={(item) => item.id.toString()}
           className="mt-5 space-y-2 "
-          renderItem={({ item }) => <CartItem key={item.id} {...item} />}
+          renderItem={({ item }) => <CartItem key={item.id} data={item} />}
         ></FlatList>
       ) : (
         <View className="items-center justify-center flex-1">
-          <Text className="text-xl text-gray-600">No items added to cart.</Text>
+          <Text
+            className="text-xl text-gray-600"
+            style={{ fontFamily: "urb-bold" }}
+          >
+            No items added to cart.
+          </Text>
         </View>
       )}
 

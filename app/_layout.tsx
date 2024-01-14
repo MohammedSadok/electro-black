@@ -1,7 +1,6 @@
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -17,9 +16,10 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    mul: require("../assets/fonts/Mulish-Regular.ttf"),
-    "mul-light": require("../assets/fonts/Mulish-ExtraLight.ttf"),
-    "mul-bold": require("../assets/fonts/Mulish-Bold.ttf"),
+    urb: require("../assets/fonts/Urbanist-Regular.ttf"),
+    "urb-light": require("../assets/fonts/Urbanist-Thin.ttf"),
+    "urb-bold": require("../assets/fonts/Urbanist-Bold.ttf"),
+    "urb-italic": require("../assets/fonts/Urbanist-Italic.ttf"),
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -41,11 +41,12 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
 
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="listing/[id]" options={{ headerTitle: "" }} />
     </Stack>
   );
 }

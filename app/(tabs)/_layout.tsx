@@ -10,7 +10,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors.dark,
         tabBarInactiveTintColor: Colors.gray,
         tabBarLabelStyle: {
-          fontFamily: "mul-bold",
+          fontFamily: "urb-bold",
         },
         tabBarStyle: {
           height: 55,

@@ -1,6 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Product } from "types";
 import { create } from "zustand";
-import { Product } from "../types";
-
+import { createJSONStorage, persist } from "zustand/middleware";
 export interface CartState {
   products: Array<Product & { quantity: number }>;
   addProduct: (product: Product) => void;
@@ -11,66 +12,82 @@ export interface CartState {
   total: number;
 }
 
-const useCartStore = create<CartState>((set) => ({
-  products: [],
-  total: 0,
-  addProduct: (product: Product) =>
-    set((state) => {
-      const hasProduct = state.products.find((p) => p.id === product.id);
-      state.total += +product.price;
+const useCartStore = create(
+  persist<CartState>(
+    (set) => ({
+      products: [],
+      total: 0,
+      addProduct: (product: Product) =>
+        set((state) => {
+          const hasProductIndex = state.products.findIndex(
+            (p) => p.id === product.id
+          );
 
-      if (hasProduct) {
-        return {
-          products: state.products.map((p) => {
-            if (p.id === product.id) {
-              return { ...p, quantity: p.quantity + 1 };
-            }
-            return p;
-          }),
-        };
-      } else {
-        return {
-          products: [...state.products, { ...product, quantity: 1 }],
-        };
-      }
-    }),
-  incrementQuantity: (product: Product) =>
-    set((state) => {
-      state.total += +product.price;
-      return {
-        products: state.products.map((p) => {
-          if (p.id === product.id) {
-            return { ...p, quantity: p.quantity + 1 };
+          if (hasProductIndex !== -1) {
+            state.products[hasProductIndex].quantity += 1;
+          } else {
+            state.products.push({ ...product, quantity: 1 });
           }
-          return p;
+
+          state.total += parseInt(product.price);
+
+          return { products: [...state.products], total: state.total };
         }),
-      };
-    }),
-  decrementQuantity: (product: Product) =>
-    set((state) => {
-      state.total -= +product.price;
-      return {
-        products: state.products.map((p) => {
-          if (p.id === product.id) {
-            return { ...p, quantity: p.quantity - 1 };
+      incrementQuantity: (product: Product) =>
+        set((state) => {
+          const productIndex = state.products.findIndex(
+            (p) => p.id === product.id
+          );
+
+          if (productIndex !== -1) {
+            state.products[productIndex].quantity += 1;
+            state.total += parseInt(product.price);
+
+            return { products: [...state.products], total: state.total };
           }
-          return p;
+
+          return state;
         }),
-      };
+      decrementQuantity: (product: Product) =>
+        set((state) => {
+          const productIndex = state.products.findIndex(
+            (p) => p.id === product.id
+          );
+
+          if (
+            productIndex !== -1 &&
+            state.products[productIndex].quantity > 1
+          ) {
+            state.products[productIndex].quantity -= 1;
+            state.total -= parseInt(product.price) * product.quantity;
+
+            return { products: [...state.products], total: state.total };
+          }
+
+          return state;
+        }),
+      reduceProduct: (product: Product) =>
+        set((state) => {
+          const removedProduct = state.products.find(
+            (p) => p.id === product.id
+          );
+
+          if (removedProduct) {
+            state.total -= parseInt(product.price) * removedProduct.quantity;
+            state.products = state.products.filter((p) => p.id !== product.id);
+
+            return { products: [...state.products], total: state.total };
+          }
+
+          return state;
+        }),
+      clearCart: () => set({ products: [], total: 0 }),
     }),
-  reduceProduct: (product: Product) =>
-    set((state) => {
-      state.total -= +product.price * product.quantity;
-      return {
-        products: state.products.filter((p) => p.id !== product.id),
-      };
-    }),
-  clearCart: () =>
-    set((state) => {
-      state.total = 0;
-      return {
-        products: [],
-      };
-    }),
-}));
+    {
+      name: "cart-storage",
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);
+
 export default useCartStore;
